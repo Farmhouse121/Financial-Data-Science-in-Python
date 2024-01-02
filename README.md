@@ -87,5 +87,13 @@ This repository is going to include all of the code supporting the new book I am
 ## The Data
 I am going to use public domain data sources, which will be mostly _Yahoo! Finance_, accessed via the `yfinance` package, and the _Fred_ depository, operated by the Federal Reserve Bank of St. Louis with data downloaded directly via the web service they provide. This is mostly daily and slower cadence data. Most of what I will write about lives in that space.
 
+## Making Proper Time Indices for Pandas
+It's been my experience that many codes return Pandas dataframes with a timestamp field for an axis but that the system is _not properly told_ that the data is, in fact, temporal in nature. (I'm looking at you **everybody** who uses textual dates as their timestamps!) This error can be remedied with the following construct, which you will see _extensively_ in my code:
+```
+df=pd.DataFrame(...)
+df.index=pd.DatetimeIndex(df.index).to_period('B')
+```
+which delivers an index of _business days_, for example. (I am grateful to [Alex De Castro](https://github.com/decastro-alex) for pointing out the existence of the `B` argument to me.)
+
 ## There Will be Many Commits
 I have learned from three decades doing scientific research & development work that it is very hard to predict which of the many edits to a script will be the _final_ one that makes it all work. In addition, I've learned that memorializing that "first working version" with a weighty editorial commit will be immediately followed by an "oh yea, also" commit to follow a few minutes later. So I don't really try, I commit when I think I've done something useful and don't shy away from committing frequently. This is particularly useful if one uses GitHub, _as I do_, to synchronize code between different physical locations (e.g. my desktop and an AWS server, for example). This may be "bad practice," but it is my practice.
