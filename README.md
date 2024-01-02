@@ -85,4 +85,7 @@ This repository is going to include all of the code supporting the new book I am
 | Financial Data Science in Python | [README](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/README.md) |
 
 ## The Data
-I am going to use public domain data sources, which will be _Yahoo! Finance_, accessed via the `yfinance` package, and the _Fred_ depository, operated by the Federal Reserve Bank of St. Louis with data downloaded directly via the web service they provide. This is mostly daily and slower cadence data. Most of what I will write about lives in that space.
+I am going to use public domain data sources, which will be mostly _Yahoo! Finance_, accessed via the `yfinance` package, and the _Fred_ depository, operated by the Federal Reserve Bank of St. Louis with data downloaded directly via the web service they provide. This is mostly daily and slower cadence data. Most of what I will write about lives in that space.
+
+## There Will be Many Commits
+I have learned from three decades doing scientific research & development work that it is very hard to predict which of the many edits to a script will be the _final_ one that makes it all work. In addition, I've learned that memorializing that "first working version" with a weighty editorial commit will be immediately followed by an "oh yea, also" commit to follow a few minutes later. So I don't really try, I commit when I think I've done something useful and don't shy away from committing frequently. This is particularly useful if one uses GitHub, _as I do_, to synchronize code between different physical locations (e.g. my desktop and an AWS server, for example). This may be "bad practice," but it is my practice.
