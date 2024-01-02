@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # this is designed to set up every notebook or executable script properly with common resources
 from sys import stdout,stderr,executable,version_info
 assert version_info.major>=3
