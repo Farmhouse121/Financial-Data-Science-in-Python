@@ -21,9 +21,9 @@ try:
     from IPython import get_ipython
     ip=get_ipython()
 
-    if ip is not None:
+    if ip is not None and 'google' in str(ip):
         for package in 'yfinance','arch':
-            nprint("Installing %s into notebook..." % package)
+            nprint("Installing %s into Google notebook..." % package)
             ip.system("pip install %s 1>/dev/null" % package)
 
 except ModuleNotFoundError:
