@@ -84,7 +84,7 @@ This repository is going to include all of the code supporting the new book I am
 
 | Title | GitHub | Medium |
 |-------|--------|--------|
-| Financial Data Science in Python | [README](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/README.md) |
+| Financial Data Science in Python | [README](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/README.md) | [Financial Data Science in Python](https://stattrader.medium.com/financial-data-science-in-python-ee66dab460cf)
 
 ## The Data
 I am going to use public domain data sources, which will be mostly _Yahoo! Finance_, accessed via the `yfinance` package, and the _Fred_ depository, operated by the Federal Reserve Bank of St. Louis with data downloaded directly via the web service they provide. This is mostly daily and slower cadence data. Most of what I will write about lives in that space.
