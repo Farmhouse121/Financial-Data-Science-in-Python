@@ -19,6 +19,48 @@ def nprint(*args,**kwargs):
 
 nprint("Starting...")
 
+# allow code to use the SIGALARM functionality to interrupt itself in a controlled fashion
+from signal import signal,SIGALRM,alarm
+
+class Timeout(Exception):
+    """Permits time limits."""
+    def __str__(self):
+        return "Timeout."
+    
+def sigalrm(x,y):
+    """Handle SIGALRM by raising a Timeout exception."""
+    raise Timeout
+    
+signal(SIGALRM,sigalrm) # register the handler
+
+# allow deep breaks, the python break syntax can only break out one level
+class Break(Exception):
+    """Permits deep breaks."""
+    def __str__(self):
+        return "Break"
+        
+# passive wrapper for with clauses for objects that don't provide __enter__ and __exit__
+class With:
+    """Dummy for with clauses."""
+    def __enter__(self):
+        return self
+        
+    def __exit__(self,*args):
+        pass
+        
+    def __init__(self,object=None):
+        self.object=object
+        
+    def __call__(self):
+        return self.object
+        
+    def __str__(self):
+        return str(self.object)
+        
+    def __repr__(self):
+        return repr(self.object)
+
+# deal with some Google colab specific stuff
 try:
     from IPython import get_ipython
     ip=get_ipython()
