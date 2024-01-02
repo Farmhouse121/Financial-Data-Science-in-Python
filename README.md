@@ -1,5 +1,7 @@
 # Financial Data Science in Python
-This collects the scripts and notebooks required to reproduce my published work. This includes both the articles that I have written in _Willmott_ magazine and my forthcoming book, which will also be titled _Financial Data Science in Python_.
+This GitHub repository
+https://github.com/Farmhouse121/Financial-Data-Science-in-Python
+collects the scripts and notebooks required to reproduce my published work. This includes both the articles that I have written in _Willmott_ magazine and my forthcoming book, which will also be titled _Financial Data Science in Python_.
 
 I will be featuring _mostly_ notebooks prepared for the Google _colab_ system, although I **strongly** reccommend using a more "procedural" workflow than most notebook users adopt. For analytical work it is important that the _internal state_ of the analytical system in use be _well known_ when an _inferential procedure_ is executed. Notebooks tend to encourage a "spaghetti" workflow that is not conducive to the internal state being well known. It is my intention that the notebooks, therefore, always be executed _from the beginning to the end_ in one session. Breaking the work into "cells" is provided for narrative convenience only.
 
