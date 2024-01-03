@@ -118,5 +118,46 @@ class GARCH2(GARCH):
         b[1:(self.p+self.o+1)]=-one
         return a,b
 
+# some special axis formatters for matplotlib
+from matplotlib.ticker import Formatter
+
+class DirectionalLabels(Formatter):
+    """Base class to provide directional formats for matplotlib axes."""
+
+    def __init__(self):
+        """Abstract base class."""
+        raise NotImplementedError("DirectionalLabels is an abstract base class. You cannot instantiate it directly.")
+
+    def __call__(self,datum,pos=None):
+        """Render the provided number as a string."""
+        return self.plus.format(datum*self.scale) if datum>0e0 else self.minus.format(-datum*self.scale) if datum<0e0 else self.zero
+    
+class PercentLabels(DirectionalLabels):
+    """Output Excel style percent labels."""
+    def __init__(self,precision=2,zero="0",scale=1e0):
+        """Set decimal precision and string to use for zeros."""
+        self.plus="{:,.%df} %%" % precision
+        self.minus="({:,.%df}) %%" % precision
+        self.zero=str(zero)
+        self.scale=abs(scale)
+        
+class CurrencyLabels(DirectionalLabels):
+    """Matplotlib formatter to provide Excel type currency formats for axes."""
+    def __init__(self,precision=2,zero="0",symbol="$",suffix="",scale=1e0):
+        """Set decimal precision and string to use for zeros."""
+        self.plus="%s {:,.%df}%s" % (symbol,precision,suffix)
+        self.minus="(%s {:,.%df}%s)" % (symbol,precision,suffix)
+        self.zero=str(zero)
+        self.scale=abs(scale)
+
+class CountLabels(DirectionalLabels):
+    """Matplotlib formatter to provide integers with commas."""
+    def __init__(self,zero="0",scale=1e0):
+        """Integers with commas."""
+        self.plus="{:,.0f}"
+        self.minus=self.plus
+        self.zero=str(zero)
+        self.scale=abs(scale)
+
 # that's all folks
 nprint("Initialized.")
