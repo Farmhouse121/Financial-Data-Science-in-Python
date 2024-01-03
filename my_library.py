@@ -12,7 +12,7 @@ def now():
     """Quickly return the time."""
     return datetime.now().strftime(TIME_FORMAT)
     
-def today()
+def today():
     """Quickly return the date."""
     return datetime.now().strftime(DATE_FORMAT)
 
