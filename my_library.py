@@ -8,13 +8,13 @@ from datetime import datetime
 DATE_FORMAT,TIME_FORMAT='%m/%d/%Y','%H:%M:%S'
 DATETIME_FORMAT=DATE_FORMAT+" "+TIME_FORMAT
 
-def now():
+def now(format=TIME_FORMAT):
     """Quickly return the time."""
-    return datetime.now().strftime(TIME_FORMAT)
+    return datetime.now().strftime(format)
     
-def today():
+def today(format=DATE_FORMAT):
     """Quickly return the date."""
-    return datetime.now().strftime(DATE_FORMAT)
+    return datetime.now().strftime(format)
 
 def nprint(*args,**kwargs):
     """Decorate the print statement with the time."""
