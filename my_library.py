@@ -11,6 +11,10 @@ DATETIME_FORMAT=DATE_FORMAT+" "+TIME_FORMAT
 def now():
     """Quickly return the time."""
     return datetime.now().strftime(TIME_FORMAT)
+    
+def today()
+    """Quickly return the date."""
+    return datetime.now().strftime(DATE_FORMAT)
 
 def nprint(*args,**kwargs):
     """Decorate the print statement with the time."""
