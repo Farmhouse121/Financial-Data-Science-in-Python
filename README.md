@@ -84,7 +84,9 @@ This repository is going to include all of the code supporting the new book I am
 
 | Title | GitHub | Medium |
 |-------|--------|--------|
-| Financial Data Science in Python | [README](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/README.md) | [Financial Data Science in Python](https://stattrader.medium.com/financial-data-science-in-python-ee66dab460cf)
+| Financial Data Science in Python | [README](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/README.md) | [Financial Data Science in Python](https://stattrader.medium.com/financial-data-science-in-python-ee66dab460cf) |
+| The Market's Not Normal: Part 1 | [The_Market's_Not_Normal.ipynb](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/blob/2fe3ae6dc08dc80d2f5d0c38ba0562e01f1c7415/The%20Market's%20Not%20Normal/The_Market's_Not_Normal.ipynb)| [The Market's Not Normal, Part 1](https://medium.com/adventures-in-data-science/the-markets-not-normal-part-1-bbba8dad2807) |
+| The Market's Not Normal: Part 2| [These_Two_Things_are_Not_the_Same.ipynb](https://github.com/Farmhouse121/Financial-Data-Science-in-Python/blob/2fe3ae6dc08dc80d2f5d0c38ba0562e01f1c7415/The%20Market's%20Not%20Normal/These_Two_Things_are_Not_the_Same.ipynb) | [The Market's Not Normal: Part 2](https://medium.com/adventures-in-data-science/the-markets-not-normal-part-2-cf8c4060f6b4)|
 
 ## The Data
 I am going to use public domain data sources, which will be mostly _Yahoo! Finance_, accessed via the `yfinance` package, and the _Fred_ depository, operated by the Federal Reserve Bank of St. Louis with data downloaded directly via the web service they provide. This is mostly daily and slower cadence data. Most of what I will write about lives in that space.
@@ -99,3 +101,11 @@ which delivers an index of _business days_, for example. (I am grateful to [Alex
 
 ## There Will be Many Commits
 I have learned from three decades doing scientific research & development work that it is very hard to predict which of the many edits to a script will be the _final_ one that makes it all work. In addition, I've learned that memorializing that "first working version" with a weighty editorial commit will be immediately followed by an "oh yea, also" commit to follow a few minutes later. So I don't really try, I commit when I think I've done something useful and don't shy away from committing frequently. This is particularly useful if one uses GitHub, _as I do_, to synchronize code between different physical locations (e.g. my desktop and an AWS server, for example). This may be "bad practice," but it is my practice.
+
+## Support
+I appreciate the many positive comments I receive regarding my work and my attempts to explain aspects of the scientific analysis of financial markets to people. If you would like to _directly_ support this work, you can _Buy me a Coffee_ via the link below. [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H7EC7Z5)
+
+You may also buy my books via Amazon and other booksellers.
+
+* [Adventures in Financial Data Science](https://medium.com/r/?url=https%3A%2F%2Famzn.to%2F3P66fyK)
+* [Essays on Trading Strategy](https://medium.com/r/?url=https%3A%2F%2Fwww.amazon.com%2FEssays-Trading-Strategy-Scientific-Finance%2Fdp%2F9811273812)
