@@ -1,0 +1,75 @@
+This is a ``scratchpad'' to generate the \LaTeX equations used in my articles. It will not run as a stand-alone LaTeX source document.
+
+\newcommand{\argmax}{\mathop{\mathrm{arg~max}}
+\newcommand{\argmin}{\mathop{\mathrm{arg~min}}
+
+\begin{equation}
+\ln\mathbb{P}[\mathrm{model}|\mathrm{data}]=\ln\mathbb{P}[\mathrm{data}|\mathrm{model}]+\ln\mathbb{P}[\mathrm{model}]-
+\ln\mathbb{P}[\mathrm{data}]
+\end{equation}
+
+\begin{equation}
+\Rightarrow\argmax_{\boldsymbol{\theta}}\ln\mathbb{P}[\mathrm{model}(\boldsymbol{\theta})|\mathrm{data}]=\argmax_{\boldsymbol{\theta}}\mathbb{L}[\mathrm{data}|\boldsymbol{\theta}]
+\end{equation}
+
+\begin{align}
+\hat{\boldsymbol{\theta}}&=\argmin_{\boldsymbol{\theta}}\sum_i\Big|x_i-x(\boldsymbol{\theta})\Big|\\
+\textit{or}\;
+\hat{\boldsymbol{\theta}}&=\argmin_{\boldsymbol{\theta}}\sum_i\Big(x_i-x(\boldsymbol{\theta})\Big)^2
+\end{align}
+
+\begin{align}
+y_i&=\alpha+\beta x_i+\varepsilon_i : \varepsilon_i\sim\mathcal{D}\\
+\Rightarrow\;\varepsilon_i&=y_i-\alpha-\beta x_i
+\end{align}
+
+\begin{align}
+    (\hat{\alpha},\hat{\beta})&=\argmax_{(\alpha,\beta)}\sum_i\ln f(\varepsilon_i)\\
+    &=\argmax_{(\alpha,\beta)}\sum_i\ln f(y_i-\alpha-\beta x_i)
+\end{align}
+
+\begin{equation}
+f(\varepsilon,\boldsymbol{\theta})=g(\varepsilon)h(\boldsymbol{\theta})e^{-q\left|\frac{\varepsilon}{\sigma}\right|^\kappa}\;\mathrm{where}\;\{q,\sigma,\kappa\}\subseteq\boldsymbol{\theta}
+\end{equation}
+
+\begin{equation*}
+    (\hat{\alpha},\hat{\beta})=\argmin_{(\alpha,\beta)}\left\{
+    \sum_{i=1}^Nq\left|\frac{y_i-\alpha-\beta x_i}{\sigma}\right|^\kappa
+    -\sum_{i=1}^N\ln g(y_i-\alpha-\beta x_i)-N\,\ln h(\boldsymbol{\theta})\right\}
+\end{equation*}
+
+\begin{equation}
+    f(y_i-\alpha-\beta x_i,\sigma)=\frac{e^{-\frac{1}{2}\left(\frac{y_i-\alpha-\beta x_i}{\sigma}\right)^2}}{\sqrt{2\pi}\sigma}\Rightarrow
+\begin{cases}
+q=\frac{1}{2}\\
+\kappa=2\\
+\ln g(y_i-\alpha-\beta x_i)=0\\
+\ln h(\boldsymbol{\theta})=-\ln(\sqrt{2\pi}\sigma)
+\end{cases}
+\end{equation}
+
+\begin{equation}
+(\hat{\alpha},\hat{\beta})=\mathop{\mathrm{arg~min}}_{(\alpha,\beta)}\sum_{i=1}^N(y_i-\alpha-\beta x_i)^2
+\end{equation}
+
+\begin{equation}
+    f(y_i-\alpha-\beta x_i,\sigma)=\frac{e^{-\left|\frac{y_i-\alpha-\beta x_i}{\sigma}\right|}}{2\sigma}\Rightarrow
+\begin{cases}
+q=1\\
+\kappa=1\\
+\ln g(y_i-\alpha-\beta x_i)=0\\
+\ln h(\boldsymbol{\theta})=-\ln(2\sigma)
+\end{cases}
+\end{equation}
+
+\begin{equation}
+(\hat{\alpha},\hat{\beta})=\mathop{\mathrm{arg~min}}_{(\alpha,\beta)}\sum_{i=1}^N|y_i-\alpha-\beta x_i|
+\end{equation}
+
+\begin{align}
+    \mathcal{D}=\mathrm{Normal}&\Leftrightarrow\hat{\alpha}=
+\mathop{\mathrm{mean}}\{x_i\}\\
+\mathcal{D}=\mathrm{Laplace}&\Leftrightarrow\hat{\alpha}=
+\mathop{\mathrm{median}}\{x_i\}
+\end{align}
+
