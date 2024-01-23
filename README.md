@@ -99,6 +99,9 @@ df.index=pd.DatetimeIndex(df.index).to_period('B')
 ```
 which delivers an index of _business days_, for example. (I am grateful to [Alex De Castro](https://github.com/decastro-alex) for pointing out the existence of the `B` argument to me.)
 
+## $\LaTeX$ "Scratchpads"
+Since my writing contains _a lot_ of mathematics, which I generally render in $\LaTeX$ and then cut'n'paste into less civil document preparation systems, I've decided to add documents that include the _math mode code_ to generate the equations. These will not render as full $\LaTeX$ documents (as I am not writing the Medium articles in $LaTeX$, I'm not going to go through the bother of preparing an analogue document for antoher format). If Medium would support $\LaTeX$ markup, in the way that GitHub does, then that would change.
+
 ## There Will be Many Commits
 I have learned from three decades doing scientific research & development work that it is very hard to predict which of the many edits to a script will be the _final_ one that makes it all work. In addition, I've learned that memorializing that "first working version" with a weighty editorial commit will be immediately followed by an "oh yea, also" commit to follow a few minutes later. So I don't really try, I commit when I think I've done something useful and don't shy away from committing frequently. This is particularly useful if one uses GitHub, _as I do_, to synchronize code between different physical locations (e.g. my desktop and an AWS server, for example). This may be "bad practice," but it is my practice.
 
