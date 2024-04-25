@@ -73,9 +73,12 @@ try:
         for package in 'yfinance','arch':
             nprint("Installing %s into Google notebook..." % package)
             ip.system("pip install %s 1>/dev/null" % package)
+            
+        from tqdm.notebook import tqdm
 
 except ModuleNotFoundError:
-    pass # if IPython not installed, we're definitely not in a notebook
+    # if IPython not installed, we're definitely not in a notebook
+    from tqdm import tqdm
 
 from warnings import filterwarnings
 filterwarnings("ignore",category=RuntimeWarning) # I don't care
