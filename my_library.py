@@ -208,6 +208,13 @@ def loadindex(indexname):
         display(index:=pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[1].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
         first_date=index['Date added'].max()
 
+    elif indexname=='FTSE 250':
+        index=pd.read_html('https://en.wikipedia.org/wiki/FTSE_250_Index')[3]
+        index["Ticker"]=index["Ticker"].apply(lambda x:x+".L") # set to Reuter's style tickers
+        index.set_index("Ticker",inplace=True)
+        display(index)
+        first_date=((pd.Period(datetime.now(),'Q')-1).asfreq('B')+1).strftime("%Y-%m-%d") # first date of current quarter
+        
     else:
         raise ValueError("Don't know how to load members of %s Index!" % indexname)
 
