@@ -166,5 +166,52 @@ class CountLabels(DirectionalLabels):
         self.zero=str(zero)
         self.scale=abs(scale)
 
+# loads index membership from Wikipedia
+def loadindex(indexname):
+    """Load the specified index and return the members and the first date for data extraction."""
+
+    if indexname=='S&P 500':
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        first_date=index['Date added'].max() # add data is in table returned
+
+    elif indexname=='NASDAQ-100':
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[4].set_index("Ticker"))
+        first_date=datetime.now().strftime("%Y-01-02") # NASDAQ rebalances (normally) on the first day of the year. Jan'1st. is *always* a holiday
+
+    elif indexname=='S&P MidCap 400':
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        updates=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies')[1].set_index(("Date","Date"))
+        updates.index=list(map(lambda x:pd.Period(x.split('[')[0],'D'),updates.index))
+        first_date=str(updates.index.max())
+
+    elif indexname=='S&P SmallCap 600':
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        updates=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies')[1].set_index(("Date","Date"))
+        updates.index=list(map(lambda x:pd.Period(x.split('[')[0],'D'),updates.index))
+        first_date=str(updates.index.max())
+
+    elif indexname=='S&P 900': # union of S&P 500 and S&P MidCap 400
+        sp500,dt500=loadindex('S&P 500')
+        sp400,dt400=loadindex('S&P MidCap 400')
+        columns=list(set(sp500.columns).intersection(set(sp400.columns)))
+        index=pd.concat([sp500[columns],sp400[columns]]).sort_index()
+        first_date=max([dt500,dt400])
+
+    elif indexname=='S&P 1500': # union of S&P 500, S&P MidCap 400, and S&P SmallCap 600
+        sp900,dt900=loadindex('S&P 900')
+        sp600,dt600=loadindex('S&P SmallCap 600')
+        columns=list(set(sp900.columns).intersection(set(sp600.columns)))
+        index=pd.concat([sp900[columns],sp600[columns]]).sort_index()
+        first_date=max([dt900,dt600])
+
+    elif indexname=='Dow': # Dow Jones
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[1].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        first_date=index['Date added'].max()
+
+    else:
+        raise ValueError("Don't know how to load members of %s Index!" % indexname)
+
+    return index[~index.index.duplicated()],first_date # drop duplicates in case some exist
+
 # that's all folks
 nprint("Initialized.")
