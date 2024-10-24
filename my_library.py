@@ -175,7 +175,7 @@ def loadindex(indexname):
         first_date=index['Date added'].max() # add data is in table returned
 
     elif indexname=='NASDAQ-100':
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[4].set_index("Ticker"))
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[4].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
         first_date=datetime.now().strftime("%Y-01-02") # NASDAQ rebalances (normally) on the first day of the year. Jan'1st. is *always* a holiday
 
     elif indexname=='S&P MidCap 400':

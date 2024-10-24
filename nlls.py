@@ -3,6 +3,7 @@ from statsmodels.base.model import GenericLikelihoodModel
 from statsmodels.api import add_constant
 from scipy.stats import norm
 from scipy.optimize import Bounds
+from my_library import zero,one
 
 class NLLS(GenericLikelihoodModel):
     """
@@ -20,7 +21,7 @@ class NLLS(GenericLikelihoodModel):
     regression is performed via the `scipy.optimize.minimize` function and (in my experience) can be a little brittle. You may need to supply
     user bounds for the latent variables if the default ones chosen are incorrect.
     """
-    def __init__(self,endog,exog=None,lower=None,upper=None,distribution=norm,extra_params_names=[],**kwargs):
+    def __init__(self,endog,exog=None,distribution=norm,extra_params_names=[],**kwargs):
         """Initialize the object, setting helpful data, and then call the base constructor."""
         # a small number
         self.epsilon=1e-7
@@ -45,7 +46,7 @@ class NLLS(GenericLikelihoodModel):
         self.df_model=self.nparams-self.k_constant
 
     def _pick_params(self,params):
-        """Helper function to divide the parameters into mean process and latent variable parameters."""
+        """Helper function to divide the parameters into linear process, disperstion and other latent variable parameters."""
         assert len(params)==self.nparams
 
         # memorialize parameters
@@ -97,7 +98,7 @@ class NLLS(GenericLikelihoodModel):
         density=self.distribution(*extra,loc=zero,scale=sigma)
 
         # compute vector of negative log likelihood of vector of observations
-        return -density.logpdf(self.endog-self.mean)*self.above*self.below
+        return -density.logpdf(self.endog-self.mean)
 
     def fit(self,start_params=None,bounds=None,maxiter=1000,**kwargs):
         """
@@ -134,6 +135,5 @@ class NLLS(GenericLikelihoodModel):
         )
         f.named_params=dict(zip(self.exog_names,self.params))
         f.num_params=len(f.named_params)
-        self.censored=self.predict(transform=True)
         return f
 
