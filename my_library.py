@@ -220,5 +220,36 @@ def loadindex(indexname):
 
     return index[~index.index.duplicated()],first_date # drop duplicates in case some exist
 
+# download data from FRED
+from requests import get
+from os import environ
+from getpass import getpass
+
+def get_fred(series_id,FRED_API_KEY=None):
+    """Function to get data from FRED API and return it as a DataFrame, also returns metadata object."""
+    
+    if FRED_API_KEY is not None:
+        environ['FRED_API_KEY']=FRED_API_KEY
+
+    elif 'FRED_API_KEY' not in environ:
+        environ['FRED_API_KEY']=getpass("You need to enter a FRED API key (your keys are stored here: https://fredaccount.stlouisfed.org/apikeys): ")
+
+    response=get((url:="https://api.stlouisfed.org/fred/series/observations?series_id={}&api_key={}&file_type=json").format(series_id,environ['FRED_API_KEY']))
+
+    if response.status_code//100!=2:
+        raise ValueError("Get status_code={:d} from {:s}".format(response.status_code,url))
+
+    df=pd.DataFrame.from_dict(pd.json_normalize(response.json())['observations'][0])[['date','value']].rename(columns={"date":"Date","value":series_id}).set_index("Date")
+    df[series_id]=df[series_id].apply(lambda x:float(x) if x!='.' else np.nan)
+
+    response=get((url:="https://api.stlouisfed.org/fred/series?series_id={}&api_key={}&file_type=json").format(series_id,environ['FRED_API_KEY']))
+
+    if response.status_code//100!=2:
+        raise ValueError("Get status_code={:d} from {:s}".format(response.status_code,url))
+
+    metadata=response.json()['seriess'][0]
+    df.index=pd.DatetimeIndex(df.index).to_period(metadata['frequency_short'])
+    return df.dropna(),metadata
+
 # that's all folks
 nprint("Initialized.")
