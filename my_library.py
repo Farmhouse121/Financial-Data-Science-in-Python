@@ -72,7 +72,7 @@ try:
     if ip is not None and 'google' in str(ip):
         for package in 'yfinance','arch':
             nprint("Installing %s into Google notebook..." % package)
-            ip.system("pip install %s 1>/dev/null" % package)
+            ip.system("pip install --upgrade %s 1>/dev/null" % package)
             
         from tqdm.notebook import tqdm
 
