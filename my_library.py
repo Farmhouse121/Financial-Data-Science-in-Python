@@ -214,7 +214,11 @@ def loadindex(indexname):
         index.set_index("Ticker",inplace=True)
         display(index)
         first_date=((pd.Period(datetime.now(),'Q')-1).asfreq('B')+1).strftime("%Y-%m-%d") # first date of current quarter
-        
+
+    elif indexname=='EURO STOXX 50': # rebalances "in September," so this is a best guess
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/EURO_STOXX_50')[4].set_index("Ticker"))
+        first_date=pd.Period(pd.Period("%4.4d-09-01" % n.year,'M'),'B') if (n:=datetime.now()).month>=9 else pd.Period(pd.Period("%4.4d-09-01" % (n.year-1),'M'),'B').strftime("%Y-%m-%d")
+    
     else:
         raise ValueError("Don't know how to load members of %s Index!" % indexname)
 
