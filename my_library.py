@@ -205,7 +205,7 @@ def loadindex(indexname):
         first_date=max([dt900,dt600])
 
     elif indexname=='Dow': # Dow Jones
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[1].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[2].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
         first_date=index['Date added'].max()
 
     elif indexname=='FTSE 250':
