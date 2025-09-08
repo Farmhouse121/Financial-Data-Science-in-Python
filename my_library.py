@@ -203,7 +203,7 @@ def loadindex(indexname,verbose=False):
         first_date=index['Date added'].max() # add data is in table returned
 
     elif indexname=='NASDAQ-100':
-        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/Nasdaq-100').text)[4].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/Nasdaq-100').text)[4].rename(columns={"Symbol":"Ticker"}).set_index("Ticker")
         first_date=datetime.now().strftime("%Y-01-02") # NASDAQ rebalances (normally) on the first day of the year. Jan'1st. is *always* a holiday
 
     elif indexname=='S&P MidCap 400':
@@ -240,15 +240,14 @@ def loadindex(indexname,verbose=False):
         index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/FTSE_250_Index').text)[3]
         index["Ticker"]=index["Ticker"].apply(lambda x:x+".L") # set to Reuter's style tickers
         index.set_index("Ticker",inplace=True)
-        display(index)
         first_date=((pd.Period(datetime.now(),'Q')-1).asfreq('B')+1).strftime("%Y-%m-%d") # first date of current quarter
 
     elif indexname=='EURO STOXX 50': # rebalances "in September," so this is a best guess
-        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/EURO_STOXX_50').text)[4].set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/EURO_STOXX_50').text)[4].set_index("Ticker")
         first_date=pd.Period(pd.Period("%4.4d-09-01" % n.year,'M'),'B') if (n:=datetime.now()).month>=9 else pd.Period(pd.Period("%4.4d-09-01" % (n.year-1),'M'),'B').strftime("%Y-%m-%d")
 
     elif indexname=='DAX':
-        index=pd.read_html(wrapped_get("https://en.wikipedia.org/wiki/DAX").text)[4].set_index('Ticker').drop('Logo',axis=1))
+        index=pd.read_html(wrapped_get("https://en.wikipedia.org/wiki/DAX").text)[4].set_index('Ticker').drop('Logo',axis=1)
         first_date=datetime.strptime(pd.read_html('https://en.wikipedia.org/wiki/DAX')[6].set_index('Date').index[-1],'%d.%m.%Y').strftime("%Y-%m-%d")
 
     else:
