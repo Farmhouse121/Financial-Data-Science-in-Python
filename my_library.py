@@ -23,6 +23,34 @@ def nprint(*args,**kwargs):
 
 nprint("Starting...")
 
+# wrapped get tries several times to access data via HTTP, this makes it resilient to timeouts etc
+from requests import get
+user_agent_header = {
+  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36",
+  "X-Requested-With": "XMLHttpRequest"
+}
+
+def wrapped_get(url,retries=3,headers=user_agent_header):
+    """Wrapped requests.get function. Will retry several times before giving up."""
+    i=retries
+    
+    while i>0:
+        try:
+            page=get(url,headers=headers)
+            break
+                        
+        except Exception as e:
+            if i>0:
+                stdout.flush()
+                stderr.write("%s\nRetry %d...\n" % (str(e),retries-i+1))
+                sleep(retries-i+1)
+                i-=1
+                        
+            else:
+                raise
+                
+    return page
+
 # allow code to use the SIGALARM functionality to interrupt itself in a controlled fashion
 from signal import signal,SIGALRM,alarm
 
@@ -167,26 +195,26 @@ class CountLabels(DirectionalLabels):
         self.scale=abs(scale)
 
 # loads index membership from Wikipedia
-def loadindex(indexname):
+def loadindex(indexname,verbose=False):
     """Load the specified index and return the members and the first date for data extraction."""
 
     if indexname=='S&P 500':
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies').text)[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker")
         first_date=index['Date added'].max() # add data is in table returned
 
     elif indexname=='NASDAQ-100':
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Nasdaq-100')[4].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/Nasdaq-100').text)[4].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
         first_date=datetime.now().strftime("%Y-01-02") # NASDAQ rebalances (normally) on the first day of the year. Jan'1st. is *always* a holiday
 
     elif indexname=='S&P MidCap 400':
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
-        updates=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies')[1].set_index(("Date","Date"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies').text)[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker")
+        updates=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/List_of_S%26P_400_companies').text)[1].set_index(("Date","Date"))
         updates.index=list(map(lambda x:pd.Period(x.split('[')[0],'D'),updates.index))
         first_date=str(updates.index.max())
 
     elif indexname=='S&P SmallCap 600':
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies')[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
-        updates=pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies')[1].set_index(("Date","Date"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies').text)[0].rename(columns={"Symbol":"Ticker"}).set_index("Ticker")
+        updates=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/List_of_S%26P_600_companies').text)[1].set_index(("Date","Date"))
         updates.index=list(map(lambda x:pd.Period(x.split('[')[0],'D'),updates.index))
         first_date=str(updates.index.max())
 
@@ -205,26 +233,29 @@ def loadindex(indexname):
         first_date=max([dt900,dt600])
 
     elif indexname=='Dow': # Dow Jones
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average')[2].rename(columns={"Symbol":"Ticker"}).set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/Dow_Jones_Industrial_Average').text)[2].rename(columns={"Symbol":"Ticker"}).set_index("Ticker")
         first_date=index['Date added'].max()
 
     elif indexname=='FTSE 250':
-        index=pd.read_html('https://en.wikipedia.org/wiki/FTSE_250_Index')[3]
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/FTSE_250_Index').text)[3]
         index["Ticker"]=index["Ticker"].apply(lambda x:x+".L") # set to Reuter's style tickers
         index.set_index("Ticker",inplace=True)
         display(index)
         first_date=((pd.Period(datetime.now(),'Q')-1).asfreq('B')+1).strftime("%Y-%m-%d") # first date of current quarter
 
     elif indexname=='EURO STOXX 50': # rebalances "in September," so this is a best guess
-        display(index:=pd.read_html('https://en.wikipedia.org/wiki/EURO_STOXX_50')[4].set_index("Ticker"))
+        index=pd.read_html(wrapped_get('https://en.wikipedia.org/wiki/EURO_STOXX_50').text)[4].set_index("Ticker"))
         first_date=pd.Period(pd.Period("%4.4d-09-01" % n.year,'M'),'B') if (n:=datetime.now()).month>=9 else pd.Period(pd.Period("%4.4d-09-01" % (n.year-1),'M'),'B').strftime("%Y-%m-%d")
 
     elif indexname=='DAX':
-        display(index:=pd.read_html("https://en.wikipedia.org/wiki/DAX")[4].set_index('Ticker').drop('Logo',axis=1))
+        index=pd.read_html(wrapped_get("https://en.wikipedia.org/wiki/DAX").text)[4].set_index('Ticker').drop('Logo',axis=1))
         first_date=datetime.strptime(pd.read_html('https://en.wikipedia.org/wiki/DAX')[6].set_index('Date').index[-1],'%d.%m.%Y').strftime("%Y-%m-%d")
 
     else:
         raise ValueError("Don't know how to load members of %s Index!" % indexname)
+
+    if 'get_ipython' in locals():
+        display(index)
 
     return index[~index.index.duplicated()],first_date # drop duplicates in case some exist
 
@@ -242,7 +273,7 @@ def get_fred(series_id,FRED_API_KEY=None):
     elif 'FRED_API_KEY' not in environ:
         environ['FRED_API_KEY']=getpass("You need to enter a FRED API key (your keys are stored here: https://fredaccount.stlouisfed.org/apikeys): ")
 
-    response=get((url:="https://api.stlouisfed.org/fred/series/observations?series_id={}&api_key={}&file_type=json").format(series_id,environ['FRED_API_KEY']))
+    response=wrapped_get((url:="https://api.stlouisfed.org/fred/series/observations?series_id={}&api_key={}&file_type=json").format(series_id,environ['FRED_API_KEY']))
 
     if response.status_code//100!=2:
         raise ValueError("Get status_code={:d} from {:s}".format(response.status_code,url))
