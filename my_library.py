@@ -125,7 +125,12 @@ half,GoldenRatio=one/two,(one+np.sqrt(five))/two
 
 # import arch classes
 from arch.univariate import ConstantMean,ARX,GeneralizedError,Normal,GARCH
-Float64Array=np.typing.NDArray[np.float64]
+
+try:
+    Float64Array=np.typing.NDArray[np.float64]
+
+except:
+    from arch.typing import Float64Array
 
 # change the constraints for GeneralizedError
 class GeneralizedError2(GeneralizedError):
