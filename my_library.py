@@ -122,6 +122,7 @@ import matplotlib.pyplot as pl ; plt=pl
 # some friendly numbers
 zero,one,two,three,four,five,ten,hundred,annualize,thousand=0e0,1e0,2e0,3e0,4e0,5e0,1e1,1e2,252e0,1e3
 half,GoldenRatio=one/two,(one+np.sqrt(five))/two
+epsilon=1e-6
 
 # import arch classes
 from arch.univariate import ConstantMean,ARX,GeneralizedError,Normal,GARCH
