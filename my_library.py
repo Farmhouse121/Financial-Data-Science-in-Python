@@ -98,7 +98,7 @@ try:
     ip=get_ipython()
 
     if ip is not None and 'google' in str(ip):
-        for package in 'yfinance','arch':
+        for package in 'yfinance','arch','pvlib':
             nprint("Installing %s into Google notebook..." % package)
             ip.system("pip install --upgrade %s 1>/dev/null" % package)
             
