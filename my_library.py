@@ -108,7 +108,7 @@ try:
         
         if (extra_packages:=[p for p in ('yfinance', 'arch', 'pvlib', 'boto3') if find_spec(p) is None]):
             print("Installing into Google notebook: %s" % ", ".join(extra_packages))
-            ip.system("pip install -qq %s" % " ".join(missing))
+            ip.system("pip install -qq %s" % " ".join(extra_packages))
 
 except ModuleNotFoundError:
     # if IPython not installed, we're definitely not in a notebook
