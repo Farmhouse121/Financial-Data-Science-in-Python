@@ -105,9 +105,11 @@ try:
         from google.colab.userdata import get as get_secret
         from tqdm.notebook import tqdm
         from importlib.util import find_spec
+        from google.colab.drive import mount
+        drive.mount('/content/drive')
         
         if (extra_packages:=[p for p in ('yfinance', 'arch', 'pvlib', 'boto3') if find_spec(p) is None]):
-            print("Installing into Google notebook: %s" % ", ".join(extra_packages))
+            nprint("Installing into Google notebook: %s" % ", ".join(extra_packages))
             ip.system("pip install -qq %s" % " ".join(extra_packages))
 
 except ModuleNotFoundError:
