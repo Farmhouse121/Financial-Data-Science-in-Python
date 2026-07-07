@@ -98,11 +98,17 @@ try:
     ip=get_ipython()
 
     if ip is not None and 'google' in str(ip):
-        for package in 'yfinance','arch','pvlib':
-            nprint("Installing %s into Google notebook..." % package)
-            ip.system("pip install --upgrade %s 1>/dev/null" % package)
-            
+        #for package in 'yfinance','arch','pvlib','boto3':
+        #    nprint("Installing %s into Google notebook..." % package)
+        #    ip.system("pip install --upgrade -qq %s " % package)
+
+        from google.colab.userdata import get as get_secret
         from tqdm.notebook import tqdm
+        from importlib.util import find_spec
+        
+        if (extra_packages:=[p for p in ('yfinance', 'arch', 'pvlib', 'boto3') if find_spec(p) is None]):
+            print("Installing into Google notebook: %s" % ", ".join(extra_packages))
+            ip.system("pip install -qq %s" % " ".join(missing))
 
 except ModuleNotFoundError:
     # if IPython not installed, we're definitely not in a notebook
