@@ -105,15 +105,23 @@ try:
         from google.colab.userdata import get as get_secret
         from tqdm.notebook import tqdm
         from importlib.util import find_spec
-        from google.colab.drive import mount
-        mount('/content/drive')
+        
+        try:
+            open("/content/drive/MyDrive")
+            raise RuntimeError("Don't know why we got here, cannot open Google Drive as a file.")
+            
+        except FileNotFoundError: # if drive is not mounted we get FNF
+            from google.colab.drive import mount
+            mount('/content/drive')
+            
+        except IsADirectoryError: # if drive is mounted we get IAD, but that's fine --- it confirms that the drive is mounted
+            pass
         
         if (extra_packages:=[p for p in ('yfinance', 'arch', 'pvlib', 'boto3') if find_spec(p) is None]):
             nprint("Installing into Google notebook: %s" % ", ".join(extra_packages))
             ip.system("pip install -qq %s" % " ".join(extra_packages))
 
-except ModuleNotFoundError:
-    # if IPython not installed, we're definitely not in a notebook
+except ModuleNotFoundError: # if IPython not installed, we're definitely not in a notebook
     from tqdm import tqdm
 
 from warnings import filterwarnings
